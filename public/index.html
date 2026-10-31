@@ -97,7 +97,15 @@ h1{margin:0;font-family:Amiri,serif;font-size:60px;font-weight:700;line-height:1
 .imp b{font-size:14px;text-align:left}
 .ews{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.07)}
 .ews i{flex:none;width:10px;height:10px;border-radius:50%}
-.ews span{flex:1;min-width:0;font-size:15px}
+.ews .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ews .t b{font-size:15px;font-weight:500}.ews .t small{font-size:12.5px;color:var(--soft);line-height:1.5}
+.ews{align-items:flex-start}.ews i{margin-top:7px}
+sup a,.src a{color:var(--gold);text-decoration:none;font-size:11px}
+.drv .base{font-size:11.5px;color:rgba(243,238,230,.82)}
+.sources{margin:0 28px 18px;padding:20px 24px}
+.sources ol{margin:8px 0 0;padding-inline-start:22px;display:grid;gap:6px;font-size:13.5px;color:var(--soft);line-height:1.6}
+.sources a{color:var(--gold)}
+@media (max-width:900px){.sources{margin:0 16px 16px}}
 .disclaimer{text-align:center;font-size:12px;color:var(--muted);padding:0 20px 26px}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 @media (max-width:900px){h1{font-size:42px}.center{min-height:320px}.hero{padding:14px 16px}.bottom{padding:0 16px 20px}
@@ -162,11 +170,15 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 <section class="card glass" aria-labelledby="ews-h">
 <div style="display:flex;justify-content:space-between;align-items:center"><h2 id="ews-h">مؤشرات الإنذار المبكر</h2></div>
 <div id="warnings"></div>
-<p class="foot">الاتجاهات توضيحية بانتظار خط الأساس.</p>
+<p class="foot">قيم موثّقة من مصادر منشورة. اللون يعكس الاتجاه مقارنة بالعتبة المذكورة.</p>
 </section>
 </div>
 
-<p class="disclaimer">نموذج أولي · الأرقام والآثار ناتجة عن نموذج توضيحي وليست بيانات رسمية</p>
+<section class="sources glass" aria-labelledby="src-h">
+<h2 id="src-h">المصادر</h2>
+<ol id="sources"></ol>
+</section>
+<p class="disclaimer">خط الأساس ومؤشرات الإنذار موثّقة من مصادر منشورة · قيم المحركات والآثار ودرجة الاقتراب افتراضات نموذج توضيحي للاستكشاف وليست تنبؤاً</p>
 
 <script>
 (function(){
@@ -193,6 +205,18 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     ['demo','التركيبة السكانية','#8B6FE0','M5 20V12M10 20V8M15 20v-6M20 20V4','عنصر اجتماعي شبه ثابت'],
     ['prod','الإنتاجية والابتكار','#3FBF6F','M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1','يغذّي محور التحول التقني']
   ];
+  var SRC=[
+    ['OECD، نتائج PISA 2022 (كما أوردتها AGBI)','https://www.agbi.com/articles/saudi-arabia-schools-oecd-pisa-tests-uae-qatar'],
+    ['Microsoft، تقرير انتشار الذكاء الاصطناعي للربع الأول 2026 (Gulf News)','https://gulfnews.com/uae/uae-ranks-first-globally-in-ai-adoption-among-working-age-population-at-701-per-cent-1.500706244'],
+    ['وزارة الموارد البشرية والتوطين، نتائج التوطين للنصف الأول 2026 (وام عبر Khaleej Times، يوليو 2026)','https://www.khaleejtimes.com/uae/emiratisation-over-190000-nationals-work-private-sector'],
+    ['وزارة الصحة ووقاية المجتمع والمركز الاتحادي للتنافسية والإحصاء، معدل خصوبة المواطنات 2016–2022 (GLMM، مايو 2025)','https://gulfmigration.grc.net/uae-crude-birth-rates-and-emirati-womens-total-fertility-rates-2016-2022/'],
+    ['المجلس الوطني الاتحادي ووزارة الصحة ووقاية المجتمع، مواليد المواطنين ومعدل الخصوبة 2023 (Gulf News)','https://gulfnews.com/uae/health/uae-citizen-birth-rate-drops-135-as-total-population-births-continue-to-rise-1.500381100'],
+    ['المركز الاتحادي للتنافسية والإحصاء، السكان نهاية 2024 (Gulf Today، سبتمبر 2025)','https://www.gulftoday.ae/news/2025/09/08/uae-population-reaches-113-million-in-2024-with-64-males-and-36-females'],
+    ['المنظمة العالمية للملكية الفكرية (WIPO)، مؤشر الابتكار العالمي 2026 (Gulf News)','https://gulfnews.com/business/economy/uae-breaks-into-worlds-top-25-most-innovative-economies-for-first-time-1.500698611'],
+    ['المركز الاتحادي للتنافسية والإحصاء، مسح القوى العاملة 2024 (Gulf News)','https://gulfnews.com/uae/government/uae-among-worlds-lowest-in-unemployment-as-labour-force-hits-record-94-million-1.500309490']
+  ];
+  var BL={edu:['PISA رياضيات 431 مقابل متوسط OECD 472 (2022)',1],ai:['70.1% من السكان في سن العمل يستخدمون الذكاء الاصطناعي (الربع الأول 2026)',2],priv:['أكثر من 190 ألف مواطن في القطاع الخاص (يوليو 2026)',3],fam:['خصوبة المواطنات 2.9 طفل لكل امرأة (2023)',5],demo:['11.3 مليون نسمة ونمو 5.7% (نهاية 2024)',6],prod:['المرتبة 25 من 139 في مؤشر الابتكار العالمي (2026)',7]};
+  function ref(n){return '<sup><a href="#src-'+n+'" aria-label="المصدر '+n+'">['+n+']</a></sup>'}
   var TABS=['الرئيسية','المحركات','السيناريوهات','مؤشرات الإنذار','القرار','التقارير'];
   var $=function(id){return document.getElementById(id)};
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -211,7 +235,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
   function renderDrivers(m){
     var box=$('drivers');
     if(!box.children.length){
-      box.innerHTML=DEF.map(function(d){return '<div class="drv"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="rgba(243,238,230,.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+d[3]+'"/></svg><div class="body"><label for="drv-'+d[0]+'"><span>'+d[1]+'</span><b class="num" id="v-'+d[0]+'"></b></label><input id="drv-'+d[0]+'" type="range" min="0" max="100" style="accent-color:'+d[2]+'"><small id="n-'+d[0]+'"></small></div></div>'}).join('');
+      box.innerHTML=DEF.map(function(d){return '<div class="drv"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="rgba(243,238,230,.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="'+d[3]+'"/></svg><div class="body"><label for="drv-'+d[0]+'"><span>'+d[1]+'</span><b class="num" id="v-'+d[0]+'"></b></label><input id="drv-'+d[0]+'" type="range" min="0" max="100" style="accent-color:'+d[2]+'"><span class="base">خط الأساس: '+BL[d[0]][0]+' '+ref(BL[d[0]][1])+'</span><small id="n-'+d[0]+'"></small></div></div>'}).join('');
       DEF.forEach(function(d){$('drv-'+d[0]).addEventListener('input',function(e){var b=compute().boosts[d[0]]||0;st.d[d[0]]=Math.max(0,Number(e.target.value)-b);render()})});
     }
     DEF.forEach(function(d){
@@ -246,9 +270,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     var IM=[['النمو الاقتصادي',imp(m.tech*0.6+m.ready*0.4),'#3FBF6F'],['جودة الحياة',imp(m.ready*0.5+m.social*0.5),'#4A9BE0'],['الهوية الوطنية',imp(m.social*0.6+m.ready*0.4-gapTR*0.4),'#8B6FE0'],['سوق العمل',imp(m.ready*0.7+m.tech*0.3-gapTR*0.5),'#E86A9A'],['التماسك الاجتماعي',imp(m.social*0.8+m.ready*0.2),'#E7C35A']];
     $('impacts').innerHTML=IM.map(function(x){var v=x[1],c=v<0?'#E5484D':x[2];return '<div class="imp"><span>'+x[0]+'</span><span class="bar"><i style="width:'+Math.max(4,Math.abs(v)/45*100)+'%;background:'+c+'"></i></span><b class="num" style="color:'+c+'">'+(v>0?'+':'')+v+'%</b></div>'}).join('');
 
-    var trend=function(a){return a.map(function(v,i){return (i*12)+','+(22-v)}).join(' ')};
-    var W=[['فجوة المهارات في التخصصات المستقبلية',m.ready<60?'#E5484D':'#E0A93A',[8,10,9,12,11,15,17,19]],['نسبة المواطنين في قطاعات المستقبل',m.eff.priv>=70?'#3FBF6F':'#E0A93A',[6,8,7,10,12,11,14,16]],['معدل تكوين الأسرة',m.eff.fam>=65?'#3FBF6F':'#E0A93A',[14,12,13,11,12,10,11,9]],['مستوى تبني الذكاء الاصطناعي في القطاعات','#3FBF6F',[5,7,8,10,13,14,17,20]],['الاعتماد على العمالة منخفضة المهارة',gapTR>10?'#E5484D':'#E0A93A',[16,15,17,14,15,13,14,12]]];
-    $('warnings').innerHTML=W.map(function(w){return '<div class="ews"><i style="background:'+w[1]+';box-shadow:0 0 8px '+w[1]+'"></i><span>'+w[0]+'</span><svg width="84" height="24" viewBox="0 0 84 24" aria-hidden="true" fill="none" stroke="'+w[1]+'" stroke-width="1.6" stroke-linejoin="round"><polyline points="'+trend(w[2])+'"/></svg></div>'}).join('');
+    var trend=function(a,lo,hi){return a.map(function(v,i){return (i*(84/(a.length-1))).toFixed(1)+','+(21-(v-lo)/(hi-lo)*18).toFixed(1)}).join(' ')};
+    var R='#E5484D',A='#E0A93A',G='#3FBF6F',B='#4A9BE0',N='#8A94A3';
+    var W=[
+      ['خصوبة المواطنات','2.9 طفل لكل امرأة (2023)، من 3.7 في 2016. عتبة الإحلال 2.1',A,[4,5],[3.7,3.7,3.6,3.3,3.23,3.2,3.1,2.9]],
+      ['مواليد المواطنين','29,926 مولوداً (2023)، بتراجع 13.55% عن 2014',A,[5]],
+      ['أداء الطلبة في الرياضيات','431 نقطة مقابل متوسط OECD 472 (PISA 2022)، بتراجع 4 نقاط',R,[1]],
+      ['المواطنون في القطاع الخاص','أكثر من 190 ألفاً، و95% من الشركات المشمولة حققت مستهدف النصف الأول 2026',G,[3]],
+      ['تبني الذكاء الاصطناعي','70.1% من السكان في سن العمل (الربع الأول 2026)، الأولى عالمياً. ريح قوية تضغط على الجاهزية',B,[2]],
+      ['الابتكار','المرتبة 25 من 139 (2026)، صعوداً من 30 في 2025',G,[7]],
+      ['فجوة بيانات: بطالة المواطنين','المعدل العام 1.9% (2024)، والمصدر لا يفصّل المواطنين',N,[8]]
+    ];
+    $('warnings').innerHTML=W.map(function(w){var sp=w[4]?'<svg width="84" height="24" viewBox="0 0 84 24" role="img" aria-label="اتجاه 2016 إلى 2023" fill="none" stroke="'+w[2]+'" stroke-width="1.6" stroke-linejoin="round"><polyline points="'+trend(w[4],2.8,3.8)+'"/></svg>':'';return '<div class="ews"><i style="background:'+w[2]+';box-shadow:0 0 8px '+w[2]+'"></i><span class="t"><b>'+w[0]+'</b><small>'+w[1]+' '+w[3].map(ref).join('')+'</small></span>'+sp+'</div>'}).join('');
+    $('sources').innerHTML=SRC.map(function(x,i){return '<li id="src-'+(i+1)+'">'+x[0]+'. <a href="'+x[1]+'" target="_blank" rel="noopener">الرابط</a></li>'}).join('');
   }
 
   document.addEventListener('click',function(e){
